@@ -17,11 +17,11 @@ import struct
 # Third-party libraries
 import numpy as np
 
-DATASET_DIR = os.path.join(os.path.dirname(__file__), "datasets")
-TRAIN_IMAGES = os.path.join(DATASET_DIR, "emnist-digits-train-images-idx3-ubyte.gz")
-TRAIN_LABELS = os.path.join(DATASET_DIR, "emnist-digits-train-labels-idx1-ubyte.gz")
-TEST_IMAGES = os.path.join(DATASET_DIR, "emnist-digits-test-images-idx3-ubyte.gz")
-TEST_LABELS = os.path.join(DATASET_DIR, "emnist-digits-test-labels-idx1-ubyte.gz")
+DATASET_DIR = os.path.join(os.path.dirname(__file__), "data/MNIST/raw")
+TRAIN_IMAGES = os.path.join(DATASET_DIR, "train-images-idx3-ubyte.gz")
+TRAIN_LABELS = os.path.join(DATASET_DIR, "train-labels-idx1-ubyte.gz")
+TEST_IMAGES = os.path.join(DATASET_DIR, "t10k-images-idx3-ubyte.gz")
+TEST_LABELS = os.path.join(DATASET_DIR, "t10k-labels-idx1-ubyte.gz")
 
 def load_data():
     """Return the MNIST data as a tuple containing the training data,
