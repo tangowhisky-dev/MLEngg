@@ -106,11 +106,51 @@ def vectorized_result(j):
 
 
 def digit_from_vector(v):
-    """Convert a 10-dim unit vector back to the digit index."""
+    """Convert a 10-dim unit vector (numpy or MLX) back to the digit index."""
+    import mlx.core as mx
+    if isinstance(v, mx.array):
+        return int(mx.argmax(v.reshape(-1)))
     v = np.asarray(v).reshape(-1)
     if v.size != 10:
         raise ValueError("digit_from_vector expects a length-10 vector")
     return int(np.argmax(v))
+
+
+def _one_hot(labels, num_classes=10):
+    """Convert integer label array (N,) to one-hot float32 ndarray of shape (num_classes, N)."""
+    n = len(labels)
+    out = np.zeros((num_classes, n), dtype=np.float32)
+    out[labels, np.arange(n)] = 1.0
+    return out
+
+
+def load_data_mlx():
+    """Return batched MLX arrays for GPU-accelerated training.
+
+    Returns:
+        (X_train, Y_train)  -- training set
+            X_train: (784, 50000) float32 MLX array
+            Y_train: (10,  50000) float32 one-hot MLX array
+        (X_val, Y_val)      -- validation set
+            X_val:   (784, 10000) float32 MLX array
+            Y_val:   (10000,)     int32 digit-label MLX array
+        (X_test, Y_test)    -- test set
+            X_test:  (784, 10000) float32 MLX array
+            Y_test:  (10000,)     int32 digit-label MLX array
+    """
+    import mlx.core as mx
+    tr_d, va_d, te_d = load_data()
+
+    X_train = mx.array(tr_d[0].T)                 # (784, N)
+    Y_train = mx.array(_one_hot(tr_d[1]))          # (10,  N)
+
+    X_val   = mx.array(va_d[0].T)                 # (784, M)
+    Y_val   = mx.array(va_d[1].astype(np.int32))  # (M,)
+
+    X_test  = mx.array(te_d[0].T)                 # (784, K)
+    Y_test  = mx.array(te_d[1].astype(np.int32))  # (K,)
+
+    return (X_train, Y_train), (X_val, Y_val), (X_test, Y_test)
 
 
 def _load_idx_images(path):
