@@ -1,9 +1,12 @@
 /datasets
 /gzip.zip
 /data
+<<<<<<< Updated upstream
 /__pycache__
 /__pycache__
 /lora_model
 /optuna_outputs
+=======
+>>>>>>> Stashed changes
 /outputs
 /wandb
